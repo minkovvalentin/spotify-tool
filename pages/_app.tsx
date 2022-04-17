@@ -1,6 +1,7 @@
 import "../styles/globals.scss";
 import {
   ClientSafeProvider,
+  getSession,
   LiteralUnion,
   SessionProvider,
 } from "next-auth/react";
@@ -19,8 +20,8 @@ import { BuiltInProviderType } from "next-auth/providers";
 import App from "next/app";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
-import { RouteGuard } from "../components/RouteGuard";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import { routeGuard } from "../utils/route";
 config.autoAddCss = false;
 interface Props extends AppProps {
   providers: Record<
@@ -32,18 +33,19 @@ interface Props extends AppProps {
   users: Users[];
 }
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: Props) {
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: Props) {
   library.add(fas, fab);
 
   return (
     <SessionProvider session={session} refetchInterval={5 * 60}>
       <UserProvider>
         <Layout>
-          <RouteGuard>
-            <div id="mainContainer">
-              <Component {...pageProps} />
-            </div>
-          </RouteGuard>
+          <div id="mainContainer">
+            <Component {...pageProps} />
+          </div>
         </Layout>
       </UserProvider>
     </SessionProvider>
@@ -68,6 +70,11 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   } catch (error) {
     console.error("Couldn't fetch", error);
   }
+
+  const session = await getSession(appContext.ctx);
+
+  routeGuard(appContext.ctx, session);
+
   return { ...appProps, accounts, sessions, users };
 };
 

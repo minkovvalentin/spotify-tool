@@ -12,7 +12,6 @@ import {
 } from "next-auth/react";
 
 import { Sessions } from "../utils/types";
-import router from "next/router";
 import Button from "../components/Button/Button";
 import styles from "../styles/Login.module.scss";
 
@@ -26,7 +25,6 @@ interface Props {
 
 const Login: NextPage<Props, Props> = ({ providers, session }) => {
   const userContext = useContext(UserContext);
-  if (userContext.status === UserStatus.Authenticated) router.push("/");
 
   const renderLogin = (
     providers: Record<
