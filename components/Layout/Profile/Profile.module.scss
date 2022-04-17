@@ -1,0 +1,78 @@
+.containerWindow {
+  z-index: 2;
+  position: fixed;
+  overflow: hidden;
+  width: 0;
+  // TO DO Transition should go in mixin
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+
+  &.expanded {
+    width: 350px;
+    // TO DO
+    // Have to make width dynamic based on content width to match longer strings.
+    // Fit-content shouldnt be used here transition animation won't work
+  }
+}
+
+.container {
+  width: 350px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentContainer {
+  padding: 30px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px 0px 0px;
+}
+
+.titleLabel {
+  background-color: hsl(0, 1%, 84%);
+  padding: 5px;
+}
+
+.icon {
+  color: $baby_blue;
+  cursor: pointer;
+  width: 20px !important;
+  height: 20px !important;
+  &:hover{
+    opacity: 0.8;
+  }
+}
+
+.profileContainer {
+  display: inline;
+  position: relative;
+}
+
+.iconProfile {
+  z-index: -1;
+  padding: $mediumMargin $mediumMargin 0 $mediumMargin;
+}
+
+.collapseBtn {
+  padding: 15px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  border-bottom: solid 4px $charcoal;
+  &:hover {
+    cursor: pointer;
+    .iconBack {
+      color: $eggshell;
+    }
+  }
+  .iconBack {
+    width: 15px !important;
+    height: 15px !important;
+  }
+}

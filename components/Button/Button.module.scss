@@ -1,0 +1,25 @@
+.button {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  color: hsl(0, 0%, 100%);
+  background-color:hsl(201, 70%, 53%);
+  height: 30px;
+  align-self: flex-end;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  &.standard {
+    &:hover {
+      background-color:hsl(201, 70%, 23%);
+    }
+  }
+
+  &.danger {
+    &:hover {
+      background-color: $light_red !important;
+      color: $charcoal;
+    }
+  }
+}
