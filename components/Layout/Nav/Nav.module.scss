@@ -1,0 +1,23 @@
+.container {
+  // background-color: green;
+  width: 100%;
+  display: flex;
+  display: inline-block;
+  .navLink {
+    padding-right: 20px;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.5;
+    }
+    &:last-child {
+      cursor: auto;
+      float: right;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .icon {
+  }
+}

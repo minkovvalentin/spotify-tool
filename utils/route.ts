@@ -2,11 +2,11 @@ import { NextPageContext } from "next";
 import { Session } from "next-auth";
 import Router from "next/router";
 
-export const routeGuard = (ctx: NextPageContext, session: Session | null) => {
-  const loginPath = "/login";
-  const playlistPath = "/playlists";
-  const unprotectedRoutes = [loginPath];
+const loginPath = "/login";
+const playlistPath = "/playlists";
+export const unprotectedRoutes = [loginPath];
 
+export const routeGuard = (ctx: NextPageContext, session: Session | null) => {
   const pathName = ctx.pathname;
 
   if (!session) {

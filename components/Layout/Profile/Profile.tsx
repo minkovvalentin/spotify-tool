@@ -22,6 +22,17 @@ function Profile() {
         })}
       >
         <div className={styles.container}>
+          <div
+            className={classNames(styles.backIconContainer, styles.icon)}
+            onClick={() => setExpanded(false)}
+          >
+            <Icon
+              prefix="fas"
+              iconName="angle-left"
+              iconClass={classNames(styles.icon, styles.iconBack)}
+            />
+          </div>
+
           <div className={styles.contentContainer}>
             {name && (
               <p>
@@ -38,18 +49,8 @@ function Profile() {
             <Button
               text={"Sign out"}
               click={signOut}
-              buttonTheme={'danger'}
+              buttonTheme={"danger"}
               buttonClass={styles.button}
-            />
-          </div>
-          <div
-            className={styles.collapseBtn}
-            onClick={() => setExpanded(false)}
-          >
-            <Icon
-              prefix="fas"
-              iconName="angle-left"
-              iconClass={classNames(styles.icon, styles.iconBack)}
             />
           </div>
         </div>

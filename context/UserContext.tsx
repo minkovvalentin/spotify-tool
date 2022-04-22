@@ -37,6 +37,8 @@ export function UserProvider({ children }: Props) {
   const { data: session, status } = useSession();
 
   useEffect(() => {
+    // TODO Export in some logger 
+    console.info('Setting user context')
     if (status === UserStatus.Authenticated) {
       let newContext = {
         ...userContext,

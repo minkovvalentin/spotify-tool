@@ -1,6 +1,7 @@
+import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { connect } from "../../../utils/connection";
-import { ResponseFuncs } from "../../../utils/types";
+import { connect } from "../../../../utils/connection";
+import { ResponseFuncs } from "../../../../utils/types";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const method: keyof ResponseFuncs = req.method as keyof ResponseFuncs;
@@ -9,8 +10,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const handleCase: ResponseFuncs = {
     GET: async (req: NextApiRequest, res: NextApiResponse) => {
+      const query = req.query;
+
+      const userId = query.userId as string;
+
       const { Account } = await connect();
-      res.json(await Account.find({}).catch(catcher));
+      try {
+        res.json(await Account.find({ userId: new ObjectId(userId) }));
+      } catch (error) {
+        console.log("Error fetching from db", error);
+        res.json(false);
+      }
     },
   };
 

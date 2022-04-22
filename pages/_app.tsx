@@ -9,34 +9,24 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import type { AppProps, AppContext } from "next/app";
 import { UserProvider } from "../context/UserContext";
 import Layout from "../components/Layout/Layout";
-import { Accounts, Sessions, Users } from "../utils/types";
-import {
-  accountsEndpoint,
-  sessionsEndpoint,
-  usersEndpoint,
-} from "../utils/endpoints";
+import { Accounts } from "../utils/types";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { BuiltInProviderType } from "next-auth/providers";
 import App from "next/app";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import { routeGuard } from "../utils/route";
+import { routeGuard, unprotectedRoutes } from "../utils/route";
 config.autoAddCss = false;
 interface Props extends AppProps {
   providers: Record<
     LiteralUnion<BuiltInProviderType, string>,
     ClientSafeProvider
   > | null;
-  accounts: Accounts[];
-  sessions: Sessions[];
-  users: Users[];
+  account: Accounts;
 }
 
-function MyApp({
-  Component,
-  pageProps: { session, ...pageProps },
-}: Props) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: Props) {
   library.add(fas, fab);
 
   return (
@@ -55,27 +45,12 @@ function MyApp({
 MyApp.getInitialProps = async (appContext: AppContext) => {
   // calls page's `getInitialProps` and fills `appProps.pageProps`
   const appProps = await App.getInitialProps(appContext);
-
-  let accounts: Accounts[] = [];
-  let sessions: Sessions[] = [];
-  let users: Users[] = [];
-
-  try {
-    const sessionsRes = await fetch(sessionsEndpoint());
-    const usersRes = await fetch(usersEndpoint());
-    const accountsRes = await fetch(accountsEndpoint());
-    accounts = await accountsRes.json();
-    sessions = await sessionsRes.json();
-    users = await usersRes.json();
-  } catch (error) {
-    console.error("Couldn't fetch", error);
-  }
-
+  // If user is logged in, get session
   const session = await getSession(appContext.ctx);
-
+  
   routeGuard(appContext.ctx, session);
 
-  return { ...appProps, accounts, sessions, users };
+  return { ...appProps };
 };
 
 export default MyApp;
