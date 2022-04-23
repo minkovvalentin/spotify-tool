@@ -30,19 +30,19 @@ interface Props extends AppProps {
 function MyApp({ Component, pageProps: { session, ...pageProps } }: Props) {
   library.add(fas, fab);
 
+  /* https://react-spectrum.adobe.com/react-aria/SSRProvider.html */
   return (
-    <SessionProvider session={session} refetchInterval={5 * 60}>
-      <UserProvider>
-        {/* https://react-spectrum.adobe.com/react-aria/SSRProvider.html */}
-        <SSRProvider>
+    <SSRProvider>
+      <SessionProvider session={session} refetchInterval={5 * 60}>
+        <UserProvider>
           <Layout>
             <div id="mainContainer">
               <Component {...pageProps} />
             </div>
           </Layout>
-        </SSRProvider>
-      </UserProvider>
-    </SessionProvider>
+        </UserProvider>
+      </SessionProvider>
+    </SSRProvider>
   );
 }
 

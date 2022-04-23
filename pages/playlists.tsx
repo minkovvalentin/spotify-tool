@@ -1,12 +1,14 @@
+import { isEqual } from "lodash";
 import type { NextPage, NextPageContext } from "next";
 import { getSession } from "next-auth/react";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getAccountByUserId, getUserByEmail } from "../api/db";
 import {
   getAllPlaylistsInUserLibrary,
   getAuthenticatedUser,
 } from "../api/spotify";
 import PlaylistCover from "../components/PlaylistCover/PlaylistCover";
+import Select, { SelectListItem } from "../components/Select/Select";
 import { UserContext } from "../context/UserContext";
 import styles from "../styles/Playlists.module.scss";
 import { Playlist } from "../types/spotify";
@@ -18,17 +20,88 @@ interface Props {
 
 const PlaylistsPage: NextPage<Props, any> = ({ playlists, accessToken }) => {
   const userContext = useContext(UserContext);
+  const [creators, setCreators] = useState<SelectListItem[]>([]);
+  const [playlistsToDisplay, setPlaylistsToDisplay] =
+    useState<Playlist[]>(playlists);
+  const [selectedCreator, setSelectedCreator] = useState<SelectListItem | null>(
+    null
+  );
 
+  // Set access token in context as it is used in other components - e.g. : PlaylistCover.tsx
   useEffect(() => {
     userContext.setUserContext({ ...userContext, accessToken });
-    console.log(accessToken);
   }, [accessToken]);
+
+  // Set filters based on playlist content
+  useEffect(() => {
+    // Wait for context to be inited so filters can take logged user in considiration
+    if (userContext.user.name) {
+      let playlistCreators: string[] = [];
+      playlists.map((playlist) => {
+        playlistCreators.push(playlist.owner.display_name);
+      });
+
+      // set creators as SelectListItem[] for the creators filter
+      const creators: SelectListItem[] = [...new Set(playlistCreators)].map(
+        (creator, i) => {
+          return { id: i, name: creator };
+        }
+      );
+
+      let ownerPlaylistCreator: SelectListItem | null = null;
+
+      creators.forEach((creator, i) => {
+        if (creator.name === userContext.user.name) {
+          // Assign the playlist creator for adding on top later
+          ownerPlaylistCreator = creator;
+          // and remove it from current array.
+          creators.splice(i, 1);
+        }
+      });
+
+      if (ownerPlaylistCreator) {
+        // if owner found, add it on top of list
+        creators.unshift(ownerPlaylistCreator);
+      }
+
+      setCreators(creators);
+    }
+  }, [userContext]);
+
+  const onSelect = (key: string | number) => {
+    const newSelectedCreator = creators.filter((creator) => {
+      return creator.id == key;
+    })[0];
+
+    if (newSelectedCreator && !isEqual(selectedCreator, newSelectedCreator)) {
+      setSelectedCreator(newSelectedCreator);
+
+      setPlaylistsToDisplay(
+        playlists.filter((playlist) => {
+          return playlist.owner.display_name === newSelectedCreator.name;
+        })
+      );
+    }
+  };
 
   return (
     <div>
-      <h1>Playlists ( {playlists.length} ) </h1>
+      <h1>Saved Playlists ( {playlists.length} ) </h1>
+      <Select
+        label="Playlist creator"
+        defaultLabel="Filter by creator"
+        options={creators}
+        onSelectionChange={(key) => {
+          onSelect(key);
+        }}
+      />
+
+      {selectedCreator?.name && (
+        <div>Showing playlists by {selectedCreator?.name}</div>
+      )}
+
       <div className={styles.playlistsContainer}>
-        {playlists.map((playlist) => {
+        {playlistsToDisplay.map((playlist) => {
           return <PlaylistCover playlist={playlist} key={playlist.name} />;
         })}
       </div>

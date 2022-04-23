@@ -45,8 +45,6 @@ export async function getServerSideProps(context: NextPageContext) {
     };
   }
 
-  console.log(playlistData);
-
   return {
     props: { playlistData },
   };
