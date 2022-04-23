@@ -4,10 +4,10 @@
   overflow: hidden;
   width: 0;
   // TO DO Transition should go in mixin
-  -webkit-transition: all 0.2s linear;
-  -moz-transition: all 0.2s linear;
-  -o-transition: all 0.2s linear;
-  transition: all 0.2s linear;
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  -o-transition: all 0.1s linear;
+  transition: all 0.1s linear;
 
   &.expanded {
     width: 350px;

@@ -26,14 +26,8 @@ export interface IGetAuthUserResponse {
   uri: string;
 }
 
-export interface IGetPlaylistsResponse {
-  href: string;
+export interface IGetPlaylistsResponse extends ISpotifyList {
   items: Playlist[];
-  limit: number;
-  next: string;
-  offset: number;
-  previous: string;
-  total: number;
 }
 
 export interface SpotifyImage {
@@ -72,4 +66,26 @@ export interface Playlist {
   tracks: SpotifyPlaylistTracks;
   type: string;
   uri: string;
+}
+
+export interface ISpotifyGetPlaylist extends Playlist {
+  tracks: any;
+  limit: number;
+  next: string;
+  offset: number;
+  previous: string | null;
+}
+
+export interface ISpotifyPlaylistTracks extends ISpotifyList {
+  // TO DO define tracks interface
+  // https://developer.spotify.com/documentation/web-api/reference/#/operations/get-track
+  items: any;
+}
+export interface ISpotifyList {
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
+  href: string;
 }

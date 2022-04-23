@@ -1,7 +1,14 @@
-import { IGetAuthUserResponse, IGetPlaylistsResponse, Playlist } from "../types/spotify";
+import {
+  IGetAuthUserResponse,
+  IGetPlaylistsResponse,
+  ISpotifyGetPlaylist,
+  Playlist,
+} from "../types/spotify";
 import {
   getSpotifyPlaylistsUrl,
   getSpotifyAuthenticatedUserUrl,
+  getSpotifyPlaylistItemsUrl,
+  getSpotifyPlaylistUrl,
 } from "../utils/endpoints";
 
 const getAuthenticatedUser = async (
@@ -101,4 +108,38 @@ const getAllPlaylistsInUserLibrary = async (
   return playlists;
 };
 
-export { getPlaylists, getAllPlaylistsInUserLibrary, getAuthenticatedUser };
+const getPlaylist = async (
+  playlistId: string,
+  access_token: string
+): Promise<ISpotifyGetPlaylist | undefined> => {
+  const url = getSpotifyPlaylistUrl(playlistId);
+
+  try {
+    const playlists = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await playlists.json();
+
+    if (result.error) {
+      console.error("Error fetching playlists", result);
+      return;
+    }
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching playlists", error);
+    return;
+  }
+};
+
+export {
+  getPlaylists,
+  getAllPlaylistsInUserLibrary,
+  getAuthenticatedUser,
+  getPlaylist,
+};

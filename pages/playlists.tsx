@@ -1,19 +1,29 @@
 import type { NextPage, NextPageContext } from "next";
 import { getSession } from "next-auth/react";
+import { useContext, useEffect } from "react";
 import { getAccountByUserId, getUserByEmail } from "../api/db";
 import {
   getAllPlaylistsInUserLibrary,
   getAuthenticatedUser,
 } from "../api/spotify";
 import PlaylistCover from "../components/PlaylistCover/PlaylistCover";
+import { UserContext } from "../context/UserContext";
 import styles from "../styles/Playlists.module.scss";
 import { Playlist } from "../types/spotify";
 
 interface Props {
   playlists: Playlist[];
+  accessToken: string;
 }
 
-const PlaylistsPage: NextPage<Props, any> = ({ playlists }) => {
+const PlaylistsPage: NextPage<Props, any> = ({ playlists, accessToken }) => {
+  const userContext = useContext(UserContext);
+
+  useEffect(() => {
+    userContext.setUserContext({ ...userContext, accessToken });
+    console.log(accessToken);
+  }, [accessToken]);
+
   return (
     <div>
       <h1>Playlists ( {playlists.length} ) </h1>
@@ -30,6 +40,7 @@ export async function getServerSideProps(context: NextPageContext) {
   // If user is logged in, get session
   const session = await getSession(context);
   let playlists: Playlist[] = [];
+  let accessToken;
 
   // TO DO :
   // This whole process should be simplified.
@@ -47,6 +58,7 @@ export async function getServerSideProps(context: NextPageContext) {
       if (foundAccounts) {
         // to get the access_token
         const { access_token } = foundAccounts[0];
+        accessToken = access_token;
         // to fetch the authenticated user from spotify api using the access_token
         const authenticatedUser = await getAuthenticatedUser(access_token);
         if (authenticatedUser) {
@@ -64,7 +76,7 @@ export async function getServerSideProps(context: NextPageContext) {
   }
 
   return {
-    props: { playlists },
+    props: { playlists, accessToken },
   };
 }
 

@@ -13,6 +13,7 @@ export enum UserStatus {
 
 interface UserContext {
   user: SessionUser;
+  accessToken: string | null;
   signOut: Function;
   status: UserStatus;
   setUserContext: React.Dispatch<React.SetStateAction<UserContext>>;
@@ -20,6 +21,7 @@ interface UserContext {
 
 const defaultState = {
   user: defaultUser,
+  accessToken: null,
   signOut: () => {},
   status: UserStatus.Unauthenticated,
   setUserContext: () => {},
@@ -37,8 +39,8 @@ export function UserProvider({ children }: Props) {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    // TODO Export in some logger 
-    console.info('Setting user context')
+    // TODO Export in some logger
+    console.info("Setting user context");
     if (status === UserStatus.Authenticated) {
       let newContext = {
         ...userContext,
@@ -55,7 +57,7 @@ export function UserProvider({ children }: Props) {
       if (!isEqual(newContext, userContext)) {
         setUserContext(newContext);
       }
-    } 
+    }
   }, [status, userContext, session?.user]);
 
   return (
