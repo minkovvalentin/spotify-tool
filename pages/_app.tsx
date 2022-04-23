@@ -5,6 +5,7 @@ import {
   LiteralUnion,
   SessionProvider,
 } from "next-auth/react";
+import { SSRProvider } from "@react-aria/ssr";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import type { AppProps, AppContext } from "next/app";
 import { UserProvider } from "../context/UserContext";
@@ -16,7 +17,7 @@ import App from "next/app";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import { routeGuard, unprotectedRoutes } from "../utils/route";
+import { routeGuard } from "../utils/route";
 config.autoAddCss = false;
 interface Props extends AppProps {
   providers: Record<
@@ -32,11 +33,14 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: Props) {
   return (
     <SessionProvider session={session} refetchInterval={5 * 60}>
       <UserProvider>
-        <Layout>
-          <div id="mainContainer">
-            <Component {...pageProps} />
-          </div>
-        </Layout>
+        {/* https://react-spectrum.adobe.com/react-aria/SSRProvider.html */}
+        <SSRProvider>
+          <Layout>
+            <div id="mainContainer">
+              <Component {...pageProps} />
+            </div>
+          </Layout>
+        </SSRProvider>
       </UserProvider>
     </SessionProvider>
   );
@@ -47,7 +51,7 @@ MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   // If user is logged in, get session
   const session = await getSession(appContext.ctx);
-  
+
   routeGuard(appContext.ctx, session);
 
   return { ...appProps };

@@ -3,7 +3,7 @@ import { Session } from "next-auth";
 import Router from "next/router";
 
 const loginPath = "/login";
-const playlistPath = "/playlists";
+const playlistPath = "/playlist";
 export const unprotectedRoutes = [loginPath];
 
 export const routeGuard = (ctx: NextPageContext, session: Session | null) => {

@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -10,11 +11,11 @@ export enum Paths {
 }
 
 const defaultNavItems: NavItem[] = [
-  { path: Paths.Playlists, label: "Playlists" },
   {
     path: Paths.Home,
     label: <Icon prefix="fas" iconName="house" iconClass={styles.icon} />,
   },
+  { path: Paths.Playlists, label: "Playlists" },
 ];
 
 interface NavItem {
@@ -42,7 +43,7 @@ const Nav = () => {
         orderedItems.push(item);
       }
     });
-    // and finally add to array
+    // and add to array
     if (currentItem) {
       orderedItems.push(currentItem);
     }
@@ -53,7 +54,11 @@ const Nav = () => {
     const { path, label, current } = navItem;
     return (
       <Link href={path} key={key}>
-        <span className={styles.navLink}>{label}</span>
+        <span
+          className={classNames(styles.navLink, { [styles.disabled]: current })}
+        >
+          {label}
+        </span>
       </Link>
     );
   };
