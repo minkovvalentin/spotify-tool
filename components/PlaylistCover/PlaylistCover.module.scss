@@ -8,5 +8,28 @@
 }
 
 .titleContainer {
+  padding: 10px;
   background-color: $green;
+  display: flex;
+  column-gap: 10px;
+}
+
+.footerContainer {
+  display: flex;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.containerRow {
+  padding: 10px;
+}
+
+.nameTitle {
+  font-size: 20px;
+}
+
+.contentContainer {
+
 }

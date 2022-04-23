@@ -43,14 +43,26 @@ const accountByUserIdDBEndpoint = (userId: string) => {
 
 /**
  * @description url for currently authenticated spotify user
- * @returns 
+ * @returns
  */
 const getSpotifyAuthenticatedUserUrl = () => {
-  return `https://api.spotify.com/v1/me`
-}
+  return `https://api.spotify.com/v1/me`;
+};
 
-const getSpotifyPlaylistsUrl = (userId: string, limit: number = 20, offset: number = 0) => {
+const getSpotifyPlaylistsUrl = (
+  userId: string,
+  limit: number = 20,
+  offset: number = 0
+) => {
   return `https://api.spotify.com/v1/users/${userId}/playlists?limit=${limit}&offset=${offset}`;
+};
+
+const getSpotifyPlaylistUrl = (playlistId: string) => {
+  return `https://api.spotify.com/v1/playlists/${playlistId}`;
+};
+
+const getSpotifyPlaylistItemsUrl = (playlistId: string) => {
+  return `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
 };
 
 export {
@@ -61,4 +73,6 @@ export {
   userByEmailDBEndpoint,
   getSpotifyAuthenticatedUserUrl,
   getSpotifyPlaylistsUrl,
+  getSpotifyPlaylistUrl,
+  getSpotifyPlaylistItemsUrl,
 };
