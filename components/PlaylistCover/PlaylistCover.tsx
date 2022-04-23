@@ -8,9 +8,7 @@ interface Props {
 }
 
 function PlaylistCover({ playlist, containerClass = "" }: Props) {
-  const { name, tracks, owner, images, description } = playlist;
-
-  console.log(images, "the images in this playlist");
+  const { name, tracks, owner, description } = playlist;
 
   return (
     <div className={classNames(styles.container, containerClass)}>
