@@ -62,6 +62,7 @@ const PlaylistsPage: NextPage<Props, any> = ({ playlists, accessToken }) => {
       if (ownerPlaylistCreator) {
         // if owner found, add it on top of list
         creators.unshift(ownerPlaylistCreator);
+        setCreatorAndFilteredPlaylists(ownerPlaylistCreator);
       }
 
       setCreators(creators);
@@ -74,14 +75,18 @@ const PlaylistsPage: NextPage<Props, any> = ({ playlists, accessToken }) => {
     })[0];
 
     if (newSelectedCreator && !isEqual(selectedCreator, newSelectedCreator)) {
-      setSelectedCreator(newSelectedCreator);
-
-      setPlaylistsToDisplay(
-        playlists.filter((playlist) => {
-          return playlist.owner.display_name === newSelectedCreator.name;
-        })
-      );
+      setCreatorAndFilteredPlaylists(newSelectedCreator);
     }
+  };
+
+  const setCreatorAndFilteredPlaylists = (playlistCreator: SelectListItem) => {
+    setSelectedCreator(playlistCreator);
+
+    setPlaylistsToDisplay(
+      playlists.filter((playlist) => {
+        return playlist.owner.display_name === playlistCreator.name;
+      })
+    );
   };
 
   return (
@@ -90,6 +95,7 @@ const PlaylistsPage: NextPage<Props, any> = ({ playlists, accessToken }) => {
       <Select
         label="Playlist creator"
         defaultLabel="Filter by creator"
+        selectedKey={selectedCreator?.id.toString()}
         options={creators}
         onSelectionChange={(key) => {
           onSelect(key);
