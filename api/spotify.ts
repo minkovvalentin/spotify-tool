@@ -1,13 +1,11 @@
 import {
   IGetAuthUserResponse,
   IGetPlaylistsResponse,
-  ISpotifyGetPlaylist,
   Playlist,
 } from "../types/spotify";
 import {
   getSpotifyPlaylistsUrl,
   getSpotifyAuthenticatedUserUrl,
-  getSpotifyPlaylistItemsUrl,
   getSpotifyPlaylistUrl,
 } from "../utils/endpoints";
 
@@ -111,7 +109,7 @@ const getAllPlaylistsInUserLibrary = async (
 const getPlaylist = async (
   playlistId: string,
   access_token: string
-): Promise<ISpotifyGetPlaylist | undefined> => {
+): Promise<Playlist | undefined> => {
   const url = getSpotifyPlaylistUrl(playlistId);
 
   try {

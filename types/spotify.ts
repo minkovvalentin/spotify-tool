@@ -2,6 +2,10 @@ export interface IExternalUrls {
   spotify: string;
 }
 
+export interface IExternalIds {
+  isrc: string;
+}
+
 export interface ISpotifyExplicitContent {
   filter_enabled: boolean;
   filter_locked: boolean;
@@ -46,9 +50,8 @@ export interface SpotifyPlaylistOwner {
   uri: string;
 }
 
-export interface SpotifyPlaylistTracks {
-  href: string;
-  total: number;
+export interface SpotifyPlaylistTracks extends Partial<ISpotifyList> {
+  items: Item[];
 }
 
 export interface Playlist {
@@ -68,19 +71,6 @@ export interface Playlist {
   uri: string;
 }
 
-export interface ISpotifyGetPlaylist extends Playlist {
-  tracks: any;
-  limit: number;
-  next: string;
-  offset: number;
-  previous: string | null;
-}
-
-export interface ISpotifyPlaylistTracks extends ISpotifyList {
-  // TO DO define tracks interface
-  // https://developer.spotify.com/documentation/web-api/reference/#/operations/get-track
-  items: any;
-}
 export interface ISpotifyList {
   limit: number;
   next: string | null;
@@ -88,4 +78,72 @@ export interface ISpotifyList {
   previous: string | null;
   total: number;
   href: string;
+}
+
+export interface Item {
+  added_at: string;
+  added_by: IAddedBy;
+  is_local: boolean;
+  primary_color: any;
+  track: Track;
+  video_thumbnail: VideoThumbnail;
+}
+
+interface IAddedBy {
+  external_urls: IExternalUrls;
+  href: string;
+  id: string;
+  type: string;
+  uri: string;
+}
+
+export interface VideoThumbnail {
+  url: string | null;
+}
+
+export interface Track {
+  album: Album;
+  artists: Artist;
+  available_markets: string[];
+  disc_number: number;
+  duration_ms: number;
+  episode: boolean;
+  explicit: boolean;
+  external_urls: IExternalUrls;
+  external_ids: IExternalIds;
+  href: string;
+  id: string;
+  isLocale: boolean;
+  name: string;
+  popularity: number;
+  previuew_url: string;
+  track: boolean;
+  track_number: number;
+  type: string;
+  uri: string;
+}
+
+export interface Album {
+  album_type: string;
+  artists: Artist[];
+  available_markets: string[];
+  external_urls: IExternalUrls;
+  href: string;
+  id: string;
+  images: SpotifyImage[];
+  name: string;
+  release_date: string;
+  release_date_precision: string;
+  total_tracks: number;
+  type: string;
+  uri: string;
+}
+
+export interface Artist {
+  external_urls: IExternalUrls;
+  href: string;
+  id: string;
+  name: string;
+  type: string;
+  uri: string;
 }

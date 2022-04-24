@@ -83,9 +83,16 @@ const PlaylistsPage: NextPage<Props, any> = ({ playlists, accessToken }) => {
     setSelectedCreator(playlistCreator);
 
     setPlaylistsToDisplay(
-      playlists.filter((playlist) => {
-        return playlist.owner.display_name === playlistCreator.name;
-      })
+      playlists
+        .filter((playlist) => {
+          return playlist.owner.display_name === playlistCreator.name;
+        })
+        .sort((a, b) => {
+          const bTracks = b.tracks.total ?? 0;
+          const aTracks = a.tracks.total ?? 0;
+
+          return bTracks - aTracks;
+        })
     );
   };
 

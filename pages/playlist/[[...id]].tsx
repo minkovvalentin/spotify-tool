@@ -1,9 +1,10 @@
 import type { NextPage, NextPageContext } from "next";
 import { getPlaylist } from "../../api/spotify";
-import { ISpotifyGetPlaylist } from "../../types/spotify";
+import { Playlist } from "../../types/spotify";
+import Track from "../../components/Track/Track";
 
 interface Props {
-  playlistData: ISpotifyGetPlaylist;
+  playlistData: Playlist;
 }
 
 const Home: NextPage<Props, any> = ({ playlistData }) => {
@@ -14,6 +15,11 @@ const Home: NextPage<Props, any> = ({ playlistData }) => {
       <h1>
         {name} ( {tracks.total} )
       </h1>
+      <div>
+        {tracks.items.map((item) => {
+          return <Track track={item.track} />;
+        })}
+      </div>
     </>
   );
 };
