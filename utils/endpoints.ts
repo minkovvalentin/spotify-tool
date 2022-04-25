@@ -9,6 +9,7 @@ export enum MongoEndpoints {
 }
 
 const apiUrl = process.env.API_URL ?? "";
+const middlemanApiUrl = process.env.SPOTIFY_MIDDLEMAN_API ?? "";
 
 const accountsDBEndpoint = () => {
   return apiUrl + MongoEndpoints.Accounts;
@@ -65,6 +66,10 @@ const getSpotifyPlaylistItemsUrl = (playlistId: string) => {
   return `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
 };
 
+const getMiddlemanPlaylistUrl = () => {
+  return `${middlemanApiUrl}/playlist`;
+};
+
 export {
   accountsDBEndpoint,
   usersDBEndpoint,
@@ -75,4 +80,5 @@ export {
   getSpotifyPlaylistsUrl,
   getSpotifyPlaylistUrl,
   getSpotifyPlaylistItemsUrl,
+  getMiddlemanPlaylistUrl,
 };
