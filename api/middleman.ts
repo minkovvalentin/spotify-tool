@@ -12,9 +12,10 @@ const getPlaylist = async (
     const playlistData = await fetch(getMiddlemanPlaylistUrl(), {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${access_token}`,
         "Content-Type": "application/json",
-        playlistId: playlistId,
+        Authorization: `Bearer ${access_token}`,
+        id: playlistId,
+        limit: "200",
       },
     });
 
