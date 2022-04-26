@@ -1,7 +1,8 @@
 import type { NextPage, NextPageContext } from "next";
-import { getPlaylist } from "../../api/spotify";
+import { getPlaylist as getSpotifyPlaylist } from "../../api/spotify";
 import { Playlist } from "../../types/spotify";
 import Track from "../../components/Track/Track";
+import { getPlaylist } from "../../api/middleman";
 
 interface Props {
   playlistData: Playlist;
@@ -39,7 +40,10 @@ export async function getServerSideProps(context: NextPageContext) {
   const playlistId = query.id[0];
   const accessToken = query.id[1];
 
-  const playlistData = await getPlaylist(playlistId, accessToken);
+  const middlemanPlaylist = await getPlaylist(playlistId, accessToken);
+  const playlistData = await getSpotifyPlaylist(playlistId, accessToken);
+
+  console.log("the middleman playlist", middlemanPlaylist);
 
   if (!playlistData) {
     console.error(`Couldn't fetch playlist with id: '${playlistId}'`);
